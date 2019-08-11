@@ -1,4 +1,5 @@
 import keras
+from sys import argv
 from keras import regularizers
 from keras.layers import Dense
 from keras.models import Sequential
@@ -109,12 +110,16 @@ def main():
     es_callback = keras.callbacks.EarlyStopping(monitor='val_loss', patience=3)
 
     # callbacks=[es_callback]
-    model.fit(x_data_training, labels_training, epochs=2000, batch_size=500, shuffle= True,
+    model.fit(x_data_training, labels_training, epochs= int(argv[1]), batch_size= int(argv[2]), shuffle= True,
                              validation_data=(x_data_testing, labels_testing), verbose=2)
 
-    predictions = model.predict(x_data_testing, batch_size=100, verbose=0)
+    predictions = model.predict(x_data_testing, batch_size=int(argv[3]), verbose=0)
 
     print(predictions)
+
+    # Save model
+    model.save('my_model.h5')  # creates a HDF5 file 'my_model.h5'
+    del model
 
 
 if __name__ == "__main__":
